@@ -1,13 +1,32 @@
 #include <stdio.h>
 
 #define NB_VALEURS 3
-#define MAX_LONGUEUR 50
+#define MAX_LIGNES 15
+
+/* Affiche une ligne de l'histogramme vertical.
+   Une colonne contient "xxx" si sa valeur est superieure ou egale a y. */
+void afficher_ligne_histov(const int valeurs[], int taille, double y)
+{
+    printf("| ");
+    for (int j = 0; j < taille; j++)
+    {
+        if (valeurs[j] >= y)
+        {
+            printf("xxx ");
+        }
+        else
+        {
+            printf("    ");
+        }
+    }
+    printf("\n");
+}
 
 int main(void)
 {
     int valeurs[NB_VALEURS] = { 8, 4, 12 };
 
-    /* Recherche du maximum */
+    /* Recherche du maximum (etape 2) */
     int maximum = valeurs[0];
     for (int i = 1; i < NB_VALEURS; i++)
     {
@@ -17,23 +36,15 @@ int main(void)
         }
     }
 
-    /* Echelle : nombre de croix pour une unite */
-    double echelle = (double)MAX_LONGUEUR / maximum;
-
-    /* Affichage de l'histogramme */
-    for (int i = 0; i < NB_VALEURS; i++)
+    /* Affichage ligne par ligne, de haut en bas */
+    for (int i = 0; i < MAX_LIGNES; i++)
     {
-        int nb_croix = (int)(valeurs[i] * echelle);
-
-        printf("| ");
-        for (int j = 0; j < nb_croix; j++)
-        {
-            printf("x");
-        }
-        printf(" %d\n", valeurs[i]);
+        /* Attention : (double) pour eviter la division entiere */
+        double y = maximum - (double)i * maximum / MAX_LIGNES;
+        afficher_ligne_histov(valeurs, NB_VALEURS, y);
     }
 
-    printf("+-------------------------------------------------------\n");
+    printf("+---------------------------------------\n");
 
     return 0;
 }
